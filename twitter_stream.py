@@ -49,13 +49,15 @@ class twitter_listener(StreamListener):
         self.tweet_file = tweet_file
 
     def on_data(self,data):
-        while True:
+        i = 0
+        for i in range (10):
             try:
                 #print(data)
-                with open(tweet_file) as tf:
+                with open(tweet_file,'w') as tf:
                     tf.write('data')
             except BaseException as e:
                 print('error on_data %s' % str(e))
+            i = i+1
         return True
 
     def on_error(self,status):
@@ -63,14 +65,14 @@ class twitter_listener(StreamListener):
             False
         print(status)
 
-class tweet_analyzer():
-    """
-    Functionality for analyzing and categorizing content from tweets.
-    """
-    def tweets_to_data_frame(self, tweets):
-        tweets = []
-        df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['Tweets'])
-#
+# class tweet_analyzer():
+#     """
+#     Functionality for analyzing and categorizing content from tweets.
+#     """
+#     def tweets_to_data_frame(self, tweets):
+#         tweets = []
+#         df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['Tweets'])
+# #
 #         df['id'] = np.array([tweet.id for tweet in tweets])
 #         df['len'] = np.array([len(tweet.text) for tweet in tweets])
 #         df['date'] = np.array([tweet.created_at for tweet in tweets])
@@ -80,14 +82,17 @@ class tweet_analyzer():
 
 
 if __name__ == "__main__":
-    tweet_file = 'tweets.txt'
+    tweet_file = 'twitter.txt'
     list_of_hastags_keywords = ['#TheBachelor', 'colton underwood']
 
     twitter_client = TwitterClient('BachelorABC')
-    print(twitter_client.get_user_timeline_tweets(1))
+    twitter_client2 = TwitterClient('bachelorburnbk')
+    print(twitter_client.get_user_timeline_tweets(679))
+    print(twitter_client2.get_user_timeline_tweets(60))
+
     #tweets = twitter_stream()
-    tweet_analyzer = tweet_analyzer()
+    # tweet_analyzer = tweet_analyzer()
     #tweets.stream_tweets(tweet_file,list_of_hastags_keywords)
-    df = tweet_analyzer.tweets_to_data_frame(tweets)
-    #
-    print(df.head(1))
+    # df = tweet_analyzer.tweets_to_data_frame(tweets)
+    # #
+    # print(df.head(1))

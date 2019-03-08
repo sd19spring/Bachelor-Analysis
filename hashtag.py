@@ -1,4 +1,7 @@
 import tweepy
+from tweepy import API
+from tweepy import Cursor
+from tweepy import OAuthHandler
 import csv
 import pandas as pd
 import config
@@ -8,16 +11,16 @@ consumer_secret = config.consumer_secret
 access_token = config.access_token_key
 access_token_secret = config.access_token_secret
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth,wait_on_rate_limit=True)
+api = API(auth,wait_on_rate_limit=True)
 
 # Open/Create a file to append data after scraping Twitter
 csvFile = open('ua.csv', 'a')
 #Use csv Writer to place tweets into an excel document
 csvWriter = csv.writer(csvFile)
 
-for tweet in tweepy.Cursor(api.search,q="#TheBachelor",count=500,
+for tweet in Cursor(api.search,q="#TheBachelor",count=500,
                            lang="en",
                            since="2019-01-07",
                            until="2019-03-01").items(): #sets time parameters for tweets

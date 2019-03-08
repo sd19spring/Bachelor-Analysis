@@ -1,8 +1,8 @@
 import tweepy
 from tweepy import API
 from tweepy import Cursor
-from tweepy.streaming import StreamListener
-from tweepy import Stream
+#from tweepy.streaming import StreamListener
+#from tweepy import Stream
 from tweepy import OAuthHandler
 
 import config
@@ -20,79 +20,93 @@ class TwitterClient():
         self.twitter_client = API(self.auth)
         self.twitter_user = twitter_user
 
+    def get_twitter_client_api(self):
+        return self.twitter_client
+
     def get_user_timeline_tweets(self, num_tweets):
         tweets = []
         for tweet in Cursor(self.twitter_client.user_timeline, id=self.twitter_user).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
-class twitter_stream():
-    """
-    attributes
-    """
-    def __init__(self):
-        self.twitter_authenticate = twitter_authenticate
-
-    def stream_tweets(self,tweet_file,list_of_hastags_keywords):
-        listener = twitter_listener(tweet_file)
-        auth = self.twitter_authenticate()
-        stream = Stream(auth,listener)
-
-        stream.filter(track = list_of_hastags_keywords)
-
-class twitter_listener(StreamListener):
-    """
-    this class writes the tweets taken from twitter to a attribute: tweet_file
-    """
-
-    def __init__(self,tweet_file):
-        self.tweet_file = tweet_file
-
-    def on_data(self,data):
-        i = 0
-        for i in range (10):
-            try:
-                #print(data)
-                with open(tweet_file,'w') as tf:
-                    tf.write('data')
-            except BaseException as e:
-                print('error on_data %s' % str(e))
-            i = i+1
-        return True
-
-    def on_error(self,status):
-        if status == 420: ### condition so that i do not get kicked out of twitter for accessing too much data
-            False
-        print(status)
-
-# class tweet_analyzer():
+# class twitter_stream():
 #     """
-#     Functionality for analyzing and categorizing content from tweets.
+#     attributes
 #     """
-#     def tweets_to_data_frame(self, tweets):
-#         tweets = []
-#         df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['Tweets'])
-# #
-#         df['id'] = np.array([tweet.id for tweet in tweets])
-#         df['len'] = np.array([len(tweet.text) for tweet in tweets])
-#         df['date'] = np.array([tweet.created_at for tweet in tweets])
-#         df['source'] = np.array([tweet.source for tweet in tweets])
-#         df['likes'] = np.array([tweet.favorite_count for tweet in tweets])
-#         df['retweets'] = np.array([tweet.retweet_count for tweet in tweets])
+#     def __init__(self):
+#         self.twitter_authenticate = twitter_authenticate
+#
+#     def stream_tweets(self,tweet_file,list_of_hastags_keywords):
+#         listener = twitter_listener(tweet_file)
+#         auth = self.twitter_authenticate()
+#         stream = Stream(auth,listener)
+#
+#         stream.filter(track = list_of_hastags_keywords)
+#
+# class twitter_listener(StreamListener):
+#     """
+#     this class writes the tweets taken from twitter to a attribute: tweet_file
+#     """
+#
+#     def __init__(self,tweet_file):
+#         self.tweet_file = tweet_file
+#
+#     def on_data(self,data):
+#         i = 0
+#         for i in range (10):
+#             try:
+#                 #print(data)
+#                 with open(tweet_file,'w') as tf:
+#                     tf.write(data)
+#             except BaseException as e:
+#                 print('error on_data %s' % str(e))
+#             i = i+1
+#         close.tweet_file
+#         return True
+#
+#     def on_error(self,status):
+#         if status == 420: ### condition so that i do not get kicked out of twitter for accessing too much data
+#             False
+#         print(status)
+
+class tweet_analyzer():
+    """
+    Functionality for analyzing and categorizing content from tweets.
+    """
+    def tweets_to_data_frame(self, tweets):
+        pd.set_option('display.max_colwidth', -1)
+        pd.options.display.max_rows = 700
+        df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['Tweets'])
+        return df
+        #df['date'] = np.array([tweet.created_at for tweet in tweets])
+
+def save_tweets(df):
+    with open(df_file,'w') as tf:
+        tf.write(str(df))
 
 
 if __name__ == "__main__":
-    tweet_file = 'twitter.txt'
+    df_file = 'BachelorABC.txt'
     list_of_hastags_keywords = ['#TheBachelor', 'colton underwood']
-
-    twitter_client = TwitterClient('BachelorABC')
-    twitter_client2 = TwitterClient('bachelorburnbk')
-    print(twitter_client.get_user_timeline_tweets(679))
-    print(twitter_client2.get_user_timeline_tweets(60))
-
     #tweets = twitter_stream()
-    # tweet_analyzer = tweet_analyzer()
     #tweets.stream_tweets(tweet_file,list_of_hastags_keywords)
-    # df = tweet_analyzer.tweets_to_data_frame(tweets)
-    # #
-    # print(df.head(1))
+
+    # twitter_client = TwitterClient('BachelorABC')
+    # twitter_client2 = TwitterClient('bachelorburnbk')
+    # print(twitter_client.get_user_timeline_tweets(679))
+    # print(twitter_client2.get_user_timeline_tweets(60))
+
+    twitter_client = TwitterClient()
+    api = twitter_client.get_twitter_client_api()
+    tweets1 = api.user_timeline(screen_name = 'BachelorABC', count = 679)
+    tweets2 = api.user_timeline(screen_name = 'bachelorburnbk', count = 60)
+    #print(tweets1)
+    #print(tweets2)
+
+    tweet_analyzer = tweet_analyzer()
+    df1 = tweet_analyzer.tweets_to_data_frame(tweets1)
+    df2 = tweet_analyzer.tweets_to_data_frame(tweets2)
+    #print(df1.head(10))
+    #print(df2)
+    save_tweets(df1)
+    

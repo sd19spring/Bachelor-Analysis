@@ -41,6 +41,8 @@ class TwitterClient():
         tweets = []
         for tweet in Cursor(self.twitter_client.user_timeline, id=self.twitter_user).items(num_tweets):
             tweets.append(tweet)
+        #gets tweets from a users timeline and adds it to a list
+        #will run for a given number of times
         return tweets
 
 class tweet_analyzer():
@@ -54,23 +56,16 @@ class tweet_analyzer():
         df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['Tweets'])
         return df
 
-def save_tweets1(df):
+def save_tweets(df,file_name):
     """
-    takes a data frame and writes it to a given file(df_file1) to save in a .txt file
+    takes the a data frame and writes it to a given file to save in a .txt file
     """
-    with open(df_file1,'w') as tf:
-        tf.write(str(df))
-
-def save_tweets2(df):
-    """
-    takes the a data frame and writes it to a given file(df_file2) to save in a .txt file
-    """
-    with open(df_file2,'w') as tf:
+    with open(file_name,'w') as tf:
         tf.write(str(df))
 
 def get_word_list(file_name):
-    """Read the specified project Gutenberg book.
-
+    """
+    Reads a file and returns a word list
     Header comments, punctuation, and whitespace are stripped away. The function
     returns a list of the words used in the book as a list. All words are
     converted to lower case.
@@ -105,7 +100,8 @@ def histogram(word_list):
     'into', "it's", 'that', '', 'therookie', '8|7c', 'i’m','it’s', 'there', 'b',
     'has', 'these', 'an', "don't", 'all', 'if', 'just', 'get', 'were', 'while',
     'up', 'too', 'my', 'it\\xe2\\x80\\x99s', 'amp\t', 'having', 'taking', "respe\\xe2\\x80\\xa6'\t\t\t\t\t\t\t\t",
-    'don\\xe2\\x80\\x99t', 'xe2\\x80\\x9ci\\xe2\\x80\\x99m', 'when', 'how', 'however') #removing words that no signficance, meaning not related to The Bachelor
+    'don\\xe2\\x80\\x99t', 'xe2\\x80\\x9ci\\xe2\\x80\\x99m', 'when', 'how', 'however')
+    #removing words that no signficance (meaning not related to The Bachelor) and words that are gibberish
     for c in word_list:
         d[c] = d.get(c,0)+1
         for k in entriesToRemove:
@@ -115,7 +111,7 @@ def histogram(word_list):
 
 def most_frequent(word_list):
     """
-    a function that reads a word and returns a list of the letters based on their frequency (decreasing)
+    a function that reads a word list and returns a list of the letters based on their frequency (decreasing)
 
     >>> most_frequent('bookkeeper')
     ['e', 'o', 'k', 'r', 'p', 'b']
@@ -170,8 +166,7 @@ def save_top_words(word_list):
     Saving most freqent words to a .txt file
     """
     with open('BachelorMostFrequent.txt', 'a') as f:
-        f.write(str(word_list)+'\n') ##how do i get a new list to starat on a new line
-
+        f.write(str(word_list)+'\n')
 
 if __name__ == "__main__":
     df_file1 = 'BachelorABC.txt'
@@ -190,8 +185,8 @@ if __name__ == "__main__":
     # df2 = tweet_analyzer.tweets_to_data_frame(tweets2)
     # print(df1.head(10))
     # print(df2)
-    # save_tweets1(df1)
-    # save_tweets2(df2)
+    # save_tweets(df1,df_file1)
+    # save_tweets(df2,df_file2)
 
     # print(get_top_n_words(get_word_list(df_file1),50))
     # print(get_top_n_words(get_word_list(df_file2),50))

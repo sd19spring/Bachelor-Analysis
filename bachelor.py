@@ -99,8 +99,14 @@ def histogram(word_list):
     {'b': 1, 'a': 3, 'n': 2}
     """
     d = dict()
+    entriesToRemove = ('rt', 'a', 'the', 'is', 'of', 'on', 'this', 'are', 'and',
+    'i', 'as', 'in', 'or', 'we', 'you', 'thebachelor', 'be', 'to', "b'rt", 'for',
+    'at', 'it', 'not', 'their', 'me', 'b"rt', 'was', 'so', 'but',"thebachelor'\t\t\t\t\t\t\t\t",
+    'into', "it's", 'that', '', 'therookie', '8|7c', 'i’m','it’s', 'there', 'b') #removing words that no signficance, meaning not related to The Bachelor
     for c in word_list:
         d[c] = d.get(c,0)+1
+        for k in entriesToRemove:
+            d.pop(k, None)
 
     return d
 
@@ -131,8 +137,8 @@ def most_frequent(word_list):
 
     return res
 
-import doctest
-doctest.run_docstring_examples(most_frequent, globals(), verbose = True)
+#import doctest
+#doctest.run_docstring_examples(most_frequent, globals(), verbose = True)
 
 def get_top_n_words(word_list, n):
     """Take a list of words as input and return a list of the n most
@@ -162,21 +168,21 @@ if __name__ == "__main__":
     df_file2 = 'bachelorburnbk.txt'
     df_file3 = '#TheBachelor.txt'
 
-    twitter_client = TwitterClient()
-    api = twitter_client.get_twitter_client_api()
-    tweets1 = api.user_timeline(screen_name = 'BachelorABC', count = 679)
-    tweets2 = api.user_timeline(screen_name = 'bachelorburnbk', count = 60)
-    #print(tweets1)
-    #print(tweets2)
+    # twitter_client = TwitterClient()
+    # api = twitter_client.get_twitter_client_api()
+    # tweets1 = api.user_timeline(screen_name = 'BachelorABC', count = 679)
+    # tweets2 = api.user_timeline(screen_name = 'bachelorburnbk', count = 60)
+    # #print(tweets1)
+    # #print(tweets2)
+    #
+    # tweet_analyzer = tweet_analyzer()
+    # df1 = tweet_analyzer.tweets_to_data_frame(tweets1)
+    # df2 = tweet_analyzer.tweets_to_data_frame(tweets2)
+    # #print(df1.head(10))
+    # #print(df2)
+    # save_tweets1(df1)
+    # save_tweets2(df2)
 
-    tweet_analyzer = tweet_analyzer()
-    df1 = tweet_analyzer.tweets_to_data_frame(tweets1)
-    df2 = tweet_analyzer.tweets_to_data_frame(tweets2)
-    #print(df1.head(10))
-    #print(df2)
-    save_tweets1(df1)
-    save_tweets2(df2)
-
-    print(get_top_n_words(get_word_list(df_file1),200))
-    print(get_top_n_words(get_word_list(df_file2),200))
-    print(get_top_n_words(get_word_list(df_file3),200))
+    print(get_top_n_words(get_word_list(df_file1),50))
+    print(get_top_n_words(get_word_list(df_file2),50))
+    print(get_top_n_words(get_word_list(df_file3),50))

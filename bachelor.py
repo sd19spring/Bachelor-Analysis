@@ -102,7 +102,8 @@ def histogram(word_list):
     entriesToRemove = ('rt', 'a', 'the', 'is', 'of', 'on', 'this', 'are', 'and',
     'i', 'as', 'in', 'or', 'we', 'you', 'thebachelor', 'be', 'to', "b'rt", 'for',
     'at', 'it', 'not', 'their', 'me', 'b"rt', 'was', 'so', 'but',"thebachelor'\t\t\t\t\t\t\t\t",
-    'into', "it's", 'that', '', 'therookie', '8|7c', 'i’m','it’s', 'there', 'b') #removing words that no signficance, meaning not related to The Bachelor
+    'into', "it's", 'that', '', 'therookie', '8|7c', 'i’m','it’s', 'there', 'b',
+    'has') #removing words that no signficance, meaning not related to The Bachelor
     for c in word_list:
         d[c] = d.get(c,0)+1
         for k in entriesToRemove:
@@ -162,6 +163,12 @@ def get_top_n_words(word_list, n):
 
     return top_n_words
 
+def save_top_words(word_list):
+    """
+    Saving most freqent words to a .txt file
+    """
+    with open('BachelorMostFrequent.txt', 'a') as f:
+        f.write(str(word_list))
 
 if __name__ == "__main__":
     df_file1 = 'BachelorABC.txt'

@@ -173,25 +173,6 @@ if __name__ == "__main__":
     df_file2 = 'bachelorburnbk.txt'
     df_file3 = '#TheBachelor.txt'
 
-    # twitter_client = TwitterClient()
-    # api = twitter_client.get_twitter_client_api()
-    # tweets1 = api.user_timeline(screen_name = 'BachelorABC', count = 679)
-    # tweets2 = api.user_timeline(screen_name = 'bachelorburnbk', count = 60)
-    # print(tweets1)
-    # print(tweets2)
-
-    # tweet_analyzer = tweet_analyzer()
-    # df1 = tweet_analyzer.tweets_to_data_frame(tweets1)
-    # df2 = tweet_analyzer.tweets_to_data_frame(tweets2)
-    # print(df1.head(10))
-    # print(df2)
-    # save_tweets(df1,df_file1)
-    # save_tweets(df2,df_file2)
-
-    # print(get_top_n_words(get_word_list(df_file1),50))
-    # print(get_top_n_words(get_word_list(df_file2),50))
-    # print(get_top_n_words(get_word_list(df_file3),50))
-
     save_top_words(get_top_n_words(get_word_list(df_file1),50))
     save_top_words(get_top_n_words(get_word_list(df_file2),50))
     save_top_words(get_top_n_words(get_word_list(df_file3),50))
